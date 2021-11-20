@@ -1,11 +1,11 @@
-#include <iostream>
+﻿#include <iostream>
 #include <conio.h>
 
 using namespace std;
 
 class Thing {
 public: 
-	virtual void ShowName() {
+	virtual void showName() {
 		printf("Thing\n");
 	}
 	virtual~Thing() {
@@ -32,7 +32,7 @@ public:
 		y = t.y;
 	}
 
-	void ShowName() {
+	void showName() {
 		printf("Table\n");
 	}
 	~Table() {
@@ -64,7 +64,7 @@ public:
 		color = c.color;
 	}
 
-	void ShowName() {
+	void showName() {
 		printf("Car\n");
 	}
 };
@@ -80,46 +80,128 @@ public:
 	}
 
 	void setObject(int i, Thing* newObject){
-		if (i <= size){
+		if (i < size){
 			storage[i] = newObject;
 		}
 		else {
-			Thing** storage2=new Thing* [i];
+			Thing** storage2 = new Thing * [i + 1];
 			for (int j = 0; j < size; j++) {
 				storage2[j] = storage[j];
 			}
-			for (int j = 0; j < size; j++) {
-				delete storage[j];
-			}
-			delete storage;
+			for (int j = size; j < i; j++)
+				storage2[j] = NULL;
+			delete[] storage;
 			storage = storage2;
-			storage[size] = newObject;
-			size = i;
+			storage[i] = newObject;
+			size = i+1;
+
 		}
+		//printf("setObject\n");
 	}
 
 	Thing& getObject(int i) {
 		return *storage[i];
+		printf("getObject\n");
 	}
 
-	int getCount() {
+	int sizeStorage() {
 		return size;
 	}
 
-	void deleteObject(int i) {
-		storage[i] = NULL;
+	void getCount() {
+		int counter = 0;
+		for (int i = 0; i < size; i++) {
+			if (storage[i] != NULL) {
+				counter = counter + 1;
+			}
+		}
+		printf("Количество элементов: %d\nРазмер хранилища: %d\n", counter, size);
 	}
+
+	void deleteObject(int i) {
+		/*if(storage[i] != NULL)
+		storage[i] = NULL;*/
+		storage[i] = NULL;
+		/*printf("deleteObject\n");*/
+	}
+
+	void showNameObject(int i) {
+		if (storage[i] != NULL) {
+			storage[i]->showName();
+		}
+		else {
+			printf("Пустой\n");
+		}
+	}
+
+	void ShowNameStorage() {
+		for (int i = 0; i < size; i++) {
+			if (storage[i] != NULL) {
+				storage[i]->showName();
+			}
+			else {
+				printf("Пустой\n");
+			}
+		}
+	}
+
 
 };
 
 int main()
 {
+	setlocale(LC_ALL, "ru");
+	srand(time(NULL));
 	MyStorage storage(10);
-	for (int i = 0; i < storage.getCount(); i++) {
-		storage.setObject(i, new Table());
+	for (int i = 0; i < storage.sizeStorage(); i++) {
+		storage.setObject(i, new Car());
 	}
-	for (int i = 0; i < storage.getCount(); i++) {
+	/*for (int i = 0; i < storage.sizeStorage(); i++) {
 		storage.getObject(i).ShowName();
 	}
+	storage.ShowNameStorage();
+	printf("\n\n");
+	storage.setObject(18, new Table());
+	storage.setObject(23, new Table());
+	storage.ShowNameStorage();
+	printf("\n\n");
+	storage.deleteObject(4);
+	storage.ShowNameStorage();
+
+	printf("\n\n");
+	storage.deleteObject(4);
+	storage.ShowNameStorage();*/
+	unsigned int start_time = clock();
+	printf("\n\n");
+	for (int i = 0; i < 100; i++) {
+		int a = rand() % 3;
+		int b = rand()%storage.sizeStorage();
+		int c;
+		switch (a) {
+		case 0:
+			c = rand() % 2;
+			if (c == 0) {
+				storage.setObject(b, new Table);
+				printf("setObject\n");
+			}
+			else {
+				storage.setObject(b, new Car);
+				printf("setObject\n");
+			}
+		case 1:
+			storage.deleteObject(b);
+			printf("deleteObject\n");
+		case 2:
+			storage.showNameObject(b);
+			/*printf("ShowName\n");*/
+		}
+	}
+	unsigned int end_time = clock(); 
+	unsigned int search_time = end_time - start_time;
+	printf("\n%d\n", search_time);
+	storage.getCount();
+	/*storage.ShowNameStorage();*/
+
+
 
 }
