@@ -62,6 +62,7 @@ public:
 		color = c.color;
 	}
 	~Car() {
+		/*printf("Car\n");*/
 	}
 
 	void showName() {
@@ -90,8 +91,8 @@ public:
 			for (int j = 0; j < size; j++) {
 				storage2[j] = storage[j];
 			}
+			delete[] storage;
 		}
-		delete[] storage;
 		storage = storage2;
 		storage[size] = newObject;
 		size = size + 1;
@@ -106,8 +107,13 @@ public:
 		return size;
 	}
 
+
+	void deleteObject(int i) {
+		storage[i] = nullptr;
+	}
+
 	void removeObject(int i) {
-		if (size !=1) {
+		if (size!=0 && i<size && size!=1) {
 			Thing** storage2 = new Thing * [size - 1];
 			for (int j = 0; j < i; j++) {
 				storage2[j] = storage[j];
@@ -115,26 +121,35 @@ public:
 			for (int j = i; j < size - 1; j++) {
 				storage2[j] = storage[j + 1];
 			}
+			delete storage[i];
 			delete[] storage;
 			size = size - 1;
 			storage = storage2;
 		}
-	}
+		else if (size == 1) {
+			storage[0] = nullptr;
+			/*delete storage[0];
+			delete[] storage;*/
+			size = 0;
+		}
 
-	void deleteObject(int i) {
-		storage[i] = nullptr;
+
+
 	}
 
 	void showNameObject(int i) {
-		if(size!=0)
+		if(size!=0 && size>i)
 		storage[i]->showName();
 	}
 
 	void showNameStorage() {
-		for (int i = 0; i < size; i++) {
-			storage[i]->showName();
+		if (size != 0) {
+			for (int i = 0; i < size; i++) {
+				storage[i]->showName();
+			}
 		}
 	}
+
 	~MyStorage() {
 		for (int i = 0; i < size; i++) {
 			delete storage[i];
@@ -148,7 +163,14 @@ void cycle(MyStorage& storage, int max) {
 	printf("\n\n");
 	for (int i = 0; i < max; i++) {
 		int a = rand() % 3;
-		int b = rand() % storage.getCount();
+		int b;
+		if (storage.getCount() != 0) {
+			b = rand() % storage.getCount();
+		}
+		else {
+			b = 0;
+		}
+		
 		int k = rand() % 2;
 		switch (a) {
 		case 0:
@@ -179,7 +201,7 @@ int main()
 
 	setlocale(LC_ALL, "ru");
 	srand(time(NULL));
-	MyStorage storage(10);
+	MyStorage storage(1);
 	for (int i = 0; i < storage.getCount(); i++) {
 		int a = rand() % 2;
 		if (a == 0) { 
@@ -189,10 +211,14 @@ int main()
 			storage.setObject(i, new Table());
 		}
 	}
+	//storage.showNameStorage();
+	//printf("\n");
+	//storage.removeObject(0);
+	//storage.showNameStorage();
+	//printf("\n");
+	//storage.addObject(new Car);
+	//storage.showNameStorage();
 
-
-	storage.showNameStorage();
-	printf("\nКоличество объектов: %d\n", storage.getCount());
 
 	cycle(storage, 100);
 	printf("\n\n");
@@ -201,4 +227,5 @@ int main()
 	printf("\n\n");
 	system("pause");
 	cycle(storage, 10000);
+
 }
