@@ -86,8 +86,10 @@ public:
 
 	void addObject(Thing* newObject) {
 		Thing** storage2 = new Thing * [size + 1];
-		for (int j = 0; j < size; j++) {
-			storage2[j] = storage[j];
+		if (size != 0) {
+			for (int j = 0; j < size; j++) {
+				storage2[j] = storage[j];
+			}
 		}
 		delete[] storage;
 		storage = storage2;
@@ -105,7 +107,7 @@ public:
 	}
 
 	void removeObject(int i) {
-		if (size != 0) {
+		if (size !=1) {
 			Thing** storage2 = new Thing * [size - 1];
 			for (int j = 0; j < i; j++) {
 				storage2[j] = storage[j];
@@ -124,6 +126,7 @@ public:
 	}
 
 	void showNameObject(int i) {
+		if(size!=0)
 		storage[i]->showName();
 	}
 
@@ -173,9 +176,10 @@ void cycle(MyStorage& storage, int max) {
 
 int main()
 {
+
 	setlocale(LC_ALL, "ru");
 	srand(time(NULL));
-	MyStorage storage(100);
+	MyStorage storage(10);
 	for (int i = 0; i < storage.getCount(); i++) {
 		int a = rand() % 2;
 		if (a == 0) { 
