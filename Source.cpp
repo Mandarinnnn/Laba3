@@ -35,7 +35,6 @@ public:
 		printf("Table\n");
 	}
 	~Table() {
-
 	}
 };
 
@@ -61,6 +60,8 @@ public:
 		x = c.x;
 		y = c.y;
 		color = c.color;
+	}
+	~Car() {
 	}
 
 	void showName() {
@@ -97,29 +98,25 @@ public:
 
 	Thing& getObject(int i) {
 		return *storage[i];
-		printf("getObject\n");
 	}
 
-	int sizeStorage() {
+	int getCount() {
 		return size;
 	}
 
-	void getCount() {
-
-		printf("Количество объектов: %d", size);
-	}
-
 	void removeObject(int i) {
-		Thing** storage2 = new Thing * [size - 1];
-		size = size - 1;
-		for (int j = 0; j < i; j++) {
-			storage2[j] = storage[j];
+		if (size != 0) {
+			Thing** storage2 = new Thing * [size - 1];
+			for (int j = 0; j < i; j++) {
+				storage2[j] = storage[j];
+			}
+			for (int j = i; j < size - 1; j++) {
+				storage2[j] = storage[j + 1];
+			}
+			delete[] storage;
+			size = size - 1;
+			storage = storage2;
 		}
-		for (int j = i; j < size; j++) {
-			storage2[j] = storage[j+1];
-		}
-		delete[] storage;
-		storage = storage2;
 	}
 
 	void deleteObject(int i) {
@@ -135,6 +132,12 @@ public:
 			storage[i]->showName();
 		}
 	}
+	~MyStorage() {
+		for (int i = 0; i < size; i++) {
+			delete storage[i];
+		}
+		delete[] storage;
+	}
 };
 
 void cycle(MyStorage& storage, int max) {
@@ -142,7 +145,7 @@ void cycle(MyStorage& storage, int max) {
 	printf("\n\n");
 	for (int i = 0; i < max; i++) {
 		int a = rand() % 3;
-		int b = rand() % storage.sizeStorage();
+		int b = rand() % storage.getCount();
 		int k = rand() % 2;
 		switch (a) {
 		case 0:
@@ -164,9 +167,8 @@ void cycle(MyStorage& storage, int max) {
 	}
 	unsigned int e = clock();
 	unsigned int time = e - s;
-	printf("\n%d\n", time);
-	storage.getCount();
-	printf("\n\n");
+	printf("\nВремя: %d миллисекунд\n", time);
+	printf("Количество объектов: %d\n", storage.getCount());
 }
 
 int main()
@@ -174,7 +176,7 @@ int main()
 	setlocale(LC_ALL, "ru");
 	srand(time(NULL));
 	MyStorage storage(100);
-	for (int i = 0; i < storage.sizeStorage(); i++) {
+	for (int i = 0; i < storage.getCount(); i++) {
 		int a = rand() % 2;
 		if (a == 0) { 
 			storage.setObject(i, new Car());
@@ -183,8 +185,10 @@ int main()
 			storage.setObject(i, new Table());
 		}
 	}
+
+
 	storage.showNameStorage();
-	storage.getCount();
+	printf("\nКоличество объектов: %d\n", storage.getCount());
 
 	cycle(storage, 100);
 	printf("\n\n");
