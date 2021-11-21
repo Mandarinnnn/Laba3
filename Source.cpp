@@ -179,8 +179,9 @@ int main()
 		if (a == 0) { 
 			storage.setObject(i, new Car());
 		}
-		else 
+		else {
 			storage.setObject(i, new Table());
+		}
 	}
 	storage.showNameStorage();
 	storage.getCount();
