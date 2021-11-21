@@ -62,7 +62,7 @@ public:
 		color = c.color;
 	}
 	~Car() {
-		/*printf("Car\n");*/
+
 	}
 
 	void showName() {
@@ -128,8 +128,6 @@ public:
 		}
 		else if (size == 1) {
 			storage[0] = nullptr;
-			/*delete storage[0];
-			delete[] storage;*/
 			size = 0;
 		}
 
@@ -211,14 +209,6 @@ int main()
 			storage.setObject(i, new Table());
 		}
 	}
-	//storage.showNameStorage();
-	//printf("\n");
-	//storage.removeObject(0);
-	//storage.showNameStorage();
-	//printf("\n");
-	//storage.addObject(new Car);
-	//storage.showNameStorage();
-
 
 	cycle(storage, 100);
 	printf("\n\n");
