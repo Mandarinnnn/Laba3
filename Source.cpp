@@ -2,7 +2,7 @@
 #include <ctime>
 using namespace std;
 
-class Thing {
+class Thing {// базовый класс
 public: 
 	virtual void showName() {
 		printf("Thing\n");
@@ -11,7 +11,7 @@ public:
 	}
 };
 
-class Table : public Thing{
+class Table : public Thing{//класс наследник от класса Thing
 private:
 	int x;
 	int y;
@@ -31,14 +31,14 @@ public:
 		y = t.y;
 	}
 
-	void showName() {
+	void showName() {//метод, показывающий название класса
 		printf("Table\n");
 	}
 	~Table() {
 	}
 };
 
-class Car : public Thing {
+class Car : public Thing {//другой класс наследник от класса Thing
 private:
 	int x;
 	int y;
@@ -65,16 +65,20 @@ public:
 
 	}
 
-	void showName() {
+	void showName() {//метод, показывающий название класса
 		printf("Car\n");
 	}
 };
 
-class MyStorage {
+class MyStorage {//класс хранилище
 private:
-	int size;
-	Thing** storage;
+	int size;//размер массива
+	Thing** storage;//массив указателей
 public:
+
+	MyStorage() {
+		size = 0;
+	}
 
 	MyStorage(int i) {
 		size = i;
@@ -85,7 +89,7 @@ public:
 		storage[i] = newObject;
 	}
 
-	void addObject(Thing* newObject) {
+	void addObject(Thing* newObject) {//добавляет объект в массив
 		Thing** storage2 = new Thing * [size + 1];
 		if (size != 0) {
 			for (int j = 0; j < size; j++) {
@@ -103,7 +107,7 @@ public:
 		return *storage[i];
 	}
 
-	int getCount() {
+	int getCount() {//возвращает размер массива
 		return size;
 	}
 
@@ -112,7 +116,7 @@ public:
 		storage[i] = nullptr;
 	}
 
-	void removeObject(int i) {
+	void removeObject(int i) {//удаляет объект из массива
 		if (size!=0 && i<size && size!=1) {
 			Thing** storage2 = new Thing * [size - 1];
 			for (int j = 0; j < i; j++) {
@@ -135,12 +139,12 @@ public:
 
 	}
 
-	void showNameObject(int i) {
+	void showNameObject(int i) {//вызывает showName у определенного объекта
 		if(size!=0 && size>i)
 		storage[i]->showName();
 	}
 
-	void showNameStorage() {
+	void showNameStorage() {//вызывает showName у всех объектов
 		if (size != 0) {
 			for (int i = 0; i < size; i++) {
 				storage[i]->showName();
@@ -156,7 +160,7 @@ public:
 	}
 };
 
-void cycle(MyStorage& storage, int max) {
+void cycle(MyStorage& storage, int max) {//цикл, который позволяет повторить несколько действии 100, 1000, 10000 раз
 	unsigned int s = clock();
 	printf("\n\n");
 	for (int i = 0; i < max; i++) {
@@ -199,7 +203,7 @@ int main()
 
 	setlocale(LC_ALL, "ru");
 	srand(time(NULL));
-	MyStorage storage(1);
+	MyStorage storage(100);
 	for (int i = 0; i < storage.getCount(); i++) {
 		int a = rand() % 2;
 		if (a == 0) { 
